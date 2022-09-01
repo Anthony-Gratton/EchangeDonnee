@@ -1,0 +1,24 @@
+{
+  "name": "echangedonnee",
+  "version": "1.0.0",
+  "description": "Cours Echange de donnees ",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anthony-Gratton/EchangeDonnee.git"
+  },
+  "author": "Anthony Gratton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anthony-Gratton/EchangeDonnee/issues"
+  },
+  "homepage": "https://github.com/Anthony-Gratton/EchangeDonnee#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "express": "^4.18.1"
+  }
+}
