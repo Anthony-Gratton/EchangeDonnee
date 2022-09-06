@@ -1,6 +1,9 @@
 import express, { response } from "express";
 import dayjs from "dayjs";
 
+import planetsRoutes from "./routes/planets-routes.js"
+import router from "./routes/planets-routes.js";
+
 const app = express()
 
 //TODO ORANGE COMMENTS !!
@@ -54,5 +57,7 @@ app.get("/maths/:operator", (req, res) => {
     res.send(String(result));
 })
 
+
+app.use("/planets", planetsRoutes)
 
 export default app;
