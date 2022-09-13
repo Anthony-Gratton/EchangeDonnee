@@ -3,8 +3,10 @@ import dayjs from "dayjs";
 
 import planetsRoutes from "./routes/planets-routes.js"
 import router from "./routes/planets-routes.js";
+import errors from "./middlewares/errors.js";
 
-const app = express()
+const app = express();
+app.use(express.json()); //Permet à notre serveur de comprendre le json reçu
 
 //TODO ORANGE COMMENTS !!
 app.get("/premiere", (req, res) => {
@@ -60,4 +62,8 @@ app.get("/maths/:operator", (req, res) => {
 
 app.use("/planets", planetsRoutes)
 
+
+
+
+app.use(errors)
 export default app;
