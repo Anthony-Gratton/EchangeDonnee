@@ -12,26 +12,54 @@ class PlanetsRoutes {
         router.get("/", this.getAll)
         router.get("/:idPlanet", this.getOne)
         router.post("/", this.post)
-        router.delete("//:idPlanet", this.delete)
+        router.delete("/:idPlanet", this.delete)
 
     }
 
 
-    delete(req, res, next) {
-        const idPlanet = parseInt(req.params.idPlanet, 10)
-
-        const index = PLANETS.findIndex(p => p.id === idPlanet);
-        if (index === - 1) {
-            return next(HttpError.ImATeapot(`La planète avec l'identifiant ${idPlanet} n'existe pas`))
+    async delete(req, res, next) {
+        try {
+            const idPlanet = req.params.idPlanet
+            const deleteResult = await planetsRepository.delete(idPlanet)
+            if (deleteResult) {
+                res.status(204).end()
+            } else {
+                return next(HttpError.NotFound(`La planète avec l'identifiant: ${req.params.idPlanet} n'existe pas`))
+            }
+        } catch (err) {
+            return next(err)
         }
-        PLANETS.splice(index, 1)
-        res.status(204).end();
+
     }
 
 
     async getAll(req, res, next) {
         try {
-            const planets = await planetsRepository.retrieveAll();
+
+            const transformsOption = {};
+            const filter = {};
+
+            if (req.query.unit) {
+                const unit = req.query.unit;
+                if (unit === 'c') {
+                    transformsOption.unit = unit;
+                } else {
+                    return next(HttpError.BadRequest('Le paramàtre unit doit avoir comme valeur c pour Celsius'))
+                }
+
+            }
+
+            if (req.query.explorer) {
+                filter.discoveredBy = req.query.explorer;
+            }
+            let planets = await planetsRepository.retrieveAll(filter);
+            //transformation
+            planets = planets.map(p => {
+                p = p.toObject({ getters: false, virtuals: false });
+                p = planetsRepository.transform(p, transformsOption);
+                return p;
+            })
+
             res.status(200).json(planets);
         } catch (err) {
             return next(err);
